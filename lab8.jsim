@@ -1,7 +1,9 @@
 *******************************************************************************
-* As with the previous labs, replace this header comment with your names!
-* - Follow "Last Name, First Name" format.
-* - Sort alphabetically!
+* LAB #6
+* G - Group 5
+* - Celestino, Kenaz
+* - Duro, Yurich
+* - Reyes, Andre
 *******************************************************************************
 
 .include "8clocks.jsim"
@@ -79,7 +81,9 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
 * Temporarily connect the control logic werf_ signal directly to werf.
 * TODO: You must replace this with circuitry so that if wa[4:0] = 0b11111 (31),
 *       the werf signal is forced OFF; otherwise, it should pass through the
-*       werf_ signal.
+*       werf_ signal. 
+* (Andre's notes: so basically, when the instruction being executed is STORE. (right? haha)
+* Though I am kinda confused how to implement it in jsim.)
 *******************************************************************************
 .connect werf werf_
 
@@ -104,7 +108,7 @@ Xcontrol  vdd  0  0  z opcode[5:0]  control[13:0]
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
-+
++  
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
 +   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
