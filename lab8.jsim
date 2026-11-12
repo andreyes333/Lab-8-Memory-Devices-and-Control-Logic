@@ -1,9 +1,11 @@
 *******************************************************************************
-* LAB #6
+* LAB #8
 * G - Group 5
 * - Celestino, Kenaz
 * - Duro, Yurich
 * - Reyes, Andre
+* 
+* We will be using our lab7-3.uasm as our reference for our lab7.bin file.
 *******************************************************************************
 
 .include "8clocks.jsim"
