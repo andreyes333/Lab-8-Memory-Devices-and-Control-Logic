@@ -79,15 +79,15 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
 +   0 0 0 0 0 0 0 0
 + )
 
-*******************************************************************************
-* Temporarily connect the control logic werf_ signal directly to werf.
-* TODO: You must replace this with circuitry so that if wa[4:0] = 0b11111 (31),
-*       the werf signal is forced OFF; otherwise, it should pass through the
-*       werf_ signal. 
-* (Andre's notes: so basically, when the instruction being executed is STORE. (right? haha)
-* Though I am kinda confused how to implement this in jsim.)
-*******************************************************************************
-.connect werf werf_
+.subckt werf_pass werf werf_
+  Xp wa[4:2] p nand3
+  Xq wa[1:0] q nand2
+  Xwp werf_ p wp nand2
+  Xwq werf_ q wq nand2
+  Xwerf wp wq werf nand2
+.ends
+
+Xwerf_pass werf werf_ werf_pass
 
 *******************************************************************************
 * Xcontrol is a read-only memory (ROM) that defines what to feed into the
@@ -98,15 +98,6 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
 *   2nd line = the memory statement itself
 *   succeeding lines = the control signals (14 bits each) for all 64 opcodes
 *                      times 2 (first half is for z = 0, second half for z = 1)
-* TODO: Fill these lines with the proper control signals for each opcode!
-* (Andre's notes: please verify if my control signals are correct. I am not 
-* certain if i can just directly input z into the signal for the BEQ and BNE 
-* instructions. Not sure also if it is correct to manually input each number for
-* alufn[5:0], or if it is possible to just input the statement "alufn[5:0]" into
-* the control signal directly??)
-* (Just to answer myself, i think I should in fact change my z's into the actual
-* coresponding bits, because i believe that makes sense considering the opcode
-* signals were doubled.)
 *******************************************************************************
 Xcontrol  vdd  0  0  z opcode[5:0]  control[13:0]
 + $memory width=14 nlocations=128 contents=(
