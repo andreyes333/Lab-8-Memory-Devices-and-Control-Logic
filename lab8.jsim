@@ -199,6 +199,29 @@ Xjdisplayb wr_werf[1:0]     wr werf_               join
 *            lab, z should instead be computed by some circuit instead of
 *            connected to ground or vdd!)
 *******************************************************************************
+
+*******************************************************************************
+* ANSWERS TO GUIDE QUESTIONS:
+* a. There is an additional Z input in the Xcontrol block to account for BEQ and BNE whose PCSEL 
+* depends on the data in Ra. For BEQ, PCSEL = 0 Z since it branches (PCSEL = 01) if Z = 1 and goes 
+* to the next instruction (PC + 4; PCSEL = 00) if Z = 0. Similarly, PCSEL = 0 Z' for BNE.
+*
+* b. Invalid instructions' output is set to 0b11000000000000 to immediately HALT the program. This 
+* is done since an invalid opcode has no defined behavior and can therefore write garbage to memory 
+* and registers (which is why Wr and WERF are set to 0), as well as changing the PC unpredictably 
+* (which is why PCSEL = 11). In other words, it prevents invalid instructions (intentional or not) 
+* from changing the machine state by making it stop immediately instead.
+*
+* c. In our lab7-3, we implemented both insertion sort (for smaller arrays) and heap sort 
+* (for larger arrays). In both of these, the opcodes for the following operations were used: 
+* LD, ST, BEQ, BNE, ADD (via the MOVE macro), CMPEQ, CMPLT, CMPLE, ADDC, SUBC, CMPLTC, CMPLEC, 
+* SHLC, SHRC and HALT. However, notable gaps in the coverage are found in the fact that JMP is 
+* never ran (so PCSEL = 10 and WDSEL = 00 is untested) and several ALUFN codes being untested 
+* (i.e. the logical operations and right shifting). Furthermore, invalid opcodes are never tested. 
+* With this, it can be said that the coverage is decent since it covers most of the valid opcodes 
+* but falls short of being good due to its incompleteness.
+*******************************************************************************
+
 .tran 1280ns
 .plot pc[8:0]
 .plot betaop(opcode[5:0])
