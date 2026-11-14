@@ -5,7 +5,8 @@
 * - Duro, Yurich
 * - Reyes, Andre
 * 
-* We will be using our lab7-3.uasm as our reference for our lab7.bin file.
+* We will be using our lab7-3.uasm as our reference for our lab7.bin file (linked below)
+* https://drive.google.com/file/d/1je6_Q8DH2EaSqNyYTrmqqb539p0WZUuC/view?usp=sharing
 *******************************************************************************
 
 .include "8clocks.jsim"
