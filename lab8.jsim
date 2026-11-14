@@ -88,8 +88,9 @@ Xjdisplayb wr_werf[1:0]     wr werf_               join
 *******************************************************************************
 * ANSWERS TO GUIDE QUESTIONS:
 * a. There is an additional Z input in the Xcontrol block to account for BEQ and BNE whose PCSEL 
-* depends on the data in Ra. For BEQ, PCSEL = 00 Z since it branches (PCSEL = 01) if Z = 1 and goes 
-* to the next instruction (PC + 4; PCSEL = 00) if Z = 0. Similarly, PCSEL = 00 Z' for BNE.
+* depends on the data in Ra. For BEQ, PCSEL depends on Z. For example, it branches (PCSEL = 01) 
+* if Z = 1 and if Z = 0, it goes to the next instruction (PC + 4; PCSEL = 00). Similarly, PCSEL 
+* depends on Z' for BNE.
 *
 * b. Invalid instructions' output is set to 0b11000000000000 to immediately HALT the program. This 
 * is done since an invalid opcode has no defined behavior and can therefore write garbage to memory 
