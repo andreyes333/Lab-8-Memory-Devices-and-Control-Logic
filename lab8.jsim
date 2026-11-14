@@ -79,7 +79,7 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
 +   0 0 0 0 0 0 0 0
 + )
 
-.subckt werf_pass werf werf_
+.subckt werf_pass wa[4:0] werf werf_
   Xp wa[4:2] p nand3
   Xq wa[1:0] q nand2
   Xwp werf_ p wp nand2
@@ -87,7 +87,7 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
   Xwerf wp wq werf nand2
 .ends
 
-Xwerf_pass werf werf_ werf_pass
+Xwerf_pass wa[4:0] werf werf_ werf_pass
 
 *******************************************************************************
 * Xcontrol is a read-only memory (ROM) that defines what to feed into the
