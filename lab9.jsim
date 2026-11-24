@@ -1,0 +1,240 @@
+*******************************************************************************
+* LAB #8
+* G - Group 5
+* - Celestino, Kenaz
+* - Duro, Yurich
+* - Reyes, Andre
+* 
+* We will be using our lab7-3.uasm as our reference for our lab7.bin file
+*******************************************************************************
+
+.include "8clocks.jsim"
+.include "nominal.jsim"
+.include "stdcell.jsim"
+
+Xmemory  vdd  0    0   pc[8:2]    inst[31:0]
++        vdd  0    0   mema[8:2]  memrd[31:0]
++        0    clk  wr  mema[8:2]  memwd[31:0]
++ $memory width=32 nlocations=128 file="lab7.bin"
+
+Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
++           vdd  0    0     ra2_[4:0]  rd2_[31:0]
++           0    clk  werf  wa[4:0]    wd[31:0]
++           vdd  0    0     0 0 0 0 0  r0_[31:0]
++           vdd  0    0     0 0 0 0 vdd  r1_[31:0]
++           vdd  0    0     0 0 0 vdd 0  r2_[31:0]
++           vdd  0    0     0 0 0 vdd vdd  r3_[31:0]
++           vdd  0    0     0 0 vdd 0 0  r4_[31:0]
++           vdd  0    0     0 0 vdd 0 vdd  r5_[31:0]
++           vdd  0    0     0 0 vdd vdd 0  r6_[31:0]
++           vdd  0    0     0 0 vdd vdd vdd  r7_[31:0]
++           vdd  0    0     0 vdd 0 0 0  r8_[31:0]
++           vdd  0    0     0 vdd 0 0 vdd  r9_[31:0]
++           vdd  0    0     0 vdd 0 vdd 0  r10_[31:0]
++           vdd  0    0     0 vdd 0 vdd vdd  r11_[31:0]
++ $memory width=32 nlocations=32 contents=(
++   0 0 0 0 0 0 0 0
++   0 0 0 0 0 0 0 0
++   0 0 0 0 0 0 0 0
++   0 0 0 0 0 0 0 0
++ )
+
+.subckt werf_pass wa[4:0] werf werf_
+  Xp wa[4:2] p nand3
+  Xq wa[1:0] q nand2
+  Xwp werf_ p wp nand2
+  Xwq werf_ q wq nand2
+  Xwerf wp wq werf nand2
+.ends
+
+Xwerf_pass wa[4:0] werf werf_ werf_pass
+
+Xcontrol  vdd  0  0  z opcode[5:0]  control[13:0]
++ $memory width=14 nlocations=128 contents=(
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b00011000000001 0b00110000000010 0b11000000000000 0b10000000000001 0b11000000000000 0b00000000000001 0b01000000000001 0b11000000000000
++   0b00000100000001 0b00000100000101 0b11000000000000 0b11000000000000 0b00000111001101 0b00000111010101 0b00000111011101 0b11000000000000
++   0b00000101100001 0b00000101111001 0b00000101011001 0b11000000000000 0b00000110000001 0b00000110000101 0b00000110001101 0b11000000000000
++   0b00010100000001 0b00010100000101 0b11000000000000 0b11000000000000 0b00010111001101 0b00010111010101 0b00010111011101 0b11000000000000
++   0b00010101100001 0b00010101111001 0b00010101011001 0b11000000000000 0b00010110000001 0b00010110000101 0b00010110001101 0b11000000000000
++  
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000 0b11000000000000
++   0b00011000000001 0b00110000000010 0b11000000000000 0b10000000000001 0b11000000000000 0b01000000000001 0b00000000000001 0b11000000000000
++   0b00000100000001 0b00000100000101 0b11000000000000 0b11000000000000 0b00000111001101 0b00000111010101 0b00000111011101 0b11000000000000
++   0b00000101100001 0b00000101111001 0b00000101011001 0b11000000000000 0b00000110000001 0b00000110000101 0b00000110001101 0b11000000000000
++   0b00010100000001 0b00010100000101 0b11000000000000 0b11000000000000 0b00010111001101 0b00010111010101 0b00010111011101 0b11000000000000
++   0b00010101100001 0b00010101111001 0b00010101011001 0b11000000000000 0b00010110000001 0b00010110000101 0b00010110001101 0b11000000000000
++ )
+
+.subckt join S T
+  .connect S T
+.ends
+
+Xjcontrola control[13:12] pcsel[1:0] join
+Xjcontrolb control11      ra2sel     join
+Xjcontrolc control10      bsel       join
+Xjcontrold control[9:8]   wdsel[1:0] join
+Xjcontrole control[7:2]   alufn[5:0] join
+Xjcontrolf control1       wr         join
+Xjcontrolg control0       werf_      join
+
+Xjinsta inst[31:26] opcode[5:0] join
+Xjinstb inst[25:21] rc[4:0]     join
+Xjinstc inst[20:16] ra[4:0]     join
+Xjinstd inst[15:11] rb[4:0]     join
+Xjinste inst[15:0]  c[15:0]     join
+
+Xjpc clk[8:4] pc[6:2] join
+.connect 0 pc[8:7] pc[1:0]
+
+*******************************************************************************
+* ALU
+*******************************************************************************
+
+* full adder 
+.subckt fa a b c_in sum c_out
+    Xfa1 a b axorb xor2
+    Xfa2 axorb c_in sum xor2
+    Xfa3 a b ab nand2
+    Xfa4 axorb c_in cinaxorb nand2
+    Xfa5 cinaxorb ab c_out nand2
+.ends
+
+* ripple-carry add32
+.subckt add32 A[31:0] B[31:0] cin0 sum[31:0] cout[31:30]
+    Xadd[31:0] A[31:0] B[31:0] cout[30] c[29:0] cin0 sum[31:0] cout[31:30] c[29:0] fa
+.ends
+
+* z checker helper subcircuit
+.subckt eq0 zbits[31:0] z
+    Xnor[7:0] zbits[31:0] temp[7:0] nor4
+    Xnand[1:0] temp[7:0] final[1:0] nand4
+    Xfinal final[1:0] z nor2
+.ends
+
+* 32-bit adder/subtractor
+.subckt as32 a[31:0] b[31:0] op0 fas[31:0] n v z
+    Xbx b[31:0] op0#32 selectedB[31:0] xor2
+    Xadd a[31:0] selectedB[31:0] op0 fas[31:0] cout[31:30] add32
+    Xv cout[31:30] v xor2
+    .connect n fas31
+    Xz fas[31:0] z eq0
+.ends
+
+* Comparator
+.subckt cmp32 n v z op[2:1] fcomp[31:0]
+    Xlt n v lt xor2
+
+    Xeq op1 z t1 nand2
+    Xltn op2 lt t2 nand2
+    Xsel t1 t2 fcomp0 nand2
+
+    .connect 0 fcomp[31:1]
+.ends
+
+* subcircuit for bool32
+.subckt bool32 a[31:0] b[31:0] op[3:0] fbool[31:0]
+    Xmux[31:0] a[31:0] b[31:0] op0#32 op1#32 op2#32 op3#32 fbool[31:0] mux4
+.ends
+
+* subcircuit for left shift
+.subckt shl32 a[31:0] b[4:0] fill shift[31:0]
+	Xslb4 b[4]#32 a[31:0] a[15:0] fill#16 w[31:0] mux2
+	Xslb3 b[3]#32 w[31:0] w[23:0] fill#8  x[31:0] mux2
+	Xslb2 b[2]#32 x[31:0] x[27:0] fill#4  y[31:0] mux2
+	Xslb1 b[1]#32 y[31:0] y[29:0] fill#2  z[31:0] mux2
+	Xslb0 b[0]#32 z[31:0] z[30:0] fill    shift[31:0] mux2
+.ends
+
+* subcircuit for bit shifter
+.subckt shift32 a[31:0] b[4:0] op[1:0] fshift[31:0]
+    XfillSelect op[1] a[31] fill and2
+    XrightSelect op[0]#32 a[31:0] a[0:31] newa[31:0] mux2
+    
+    XshiftLeft newa[31:0] b[4:0] fill sl[31:0] shl32
+
+	Xout op[0]#32 sl[31:0] sl[0:31] fshift[31:0] mux2
+.ends
+
+* subcircuit for alu
+.subckt alu32 a[31:0] b[31:0] alufn[5:0] f[31:0]
+    Xaddsub a[31:0] b[31:0] alufn0 fas[31:0] n v z as32
+    Xbool a[31:0] b[31:0] alufn[3:0] fbool[31:0] bool32
+    Xbitshift a[31:0] b[4:0] alufn[1:0] fshift[31:0] shift32
+    Xcomp n v z alufn[2:1] fcomp[31:0] cmp32
+
+    Xout alufn4#32 alufn5#32 fas[31:0] fbool[31:0] fshift[31:0] fcomp[31:0] f[31:0] mux4
+.ends
+
+*******************************************************************************
+* DATAPATH
+*******************************************************************************
+* register/data-memory write clock 
+* (issue: green bar of death on other clock speeds; sometimes 2 rising edge for 1 instruction)
+* won't settle too much on this since PC won't be clock based anymore but just used this to check if implementations work
+Xjclk clk3 clk join
+
+* register file read/write addresses
+Xjra1 ra[4:0] ra1_[4:0] join
+Xjwa  rc[4:0] wa[4:0]   join
+
+* RA2SEL mux: 0 -> Rb, 1 -> Rc
+Xra2mux ra2sel#5 rb[4:0] rc[4:0] ra2_[4:0] mux2
+
+* sign-extended literal SEXT(c)
+Xjsext1 c[15:0]  sext[15:0]  join
+Xjsext2 c15#16   sext[31:16] join
+
+* BSEL mux: 0 -> Rd2, 1 -> SEXT(c)
+Xbselmux bsel#32 rd2_[31:0] sext[31:0] alub[31:0] mux2
+
+* ALU
+Xalu rd1_[31:0] alub[31:0] alufn[5:0] aluf[31:0] alu32
+
+* Z detect on Rd1
+Xzdet rd1_[31:0] z eq0
+
+* PC+4
+Xjpcx pc[8:0] pcx[8:0] join
+.connect 0 pcx[31:9]
+.connect 0 four[31:3] four[1:0]
+.connect vdd four2
+Xpcadd pcx[31:0] four[31:0] 0 pc4[31:0] pc4cout[31:30] add32
+
+* data memory address / write data
+Xjmema  aluf[8:0]   mema[8:0]    join
+Xjmemwd rd2_[31:0]  memwd[31:0]  join
+
+* WDSEL mux: 00 -> PC+4, 01 -> ALU, 10 -> memory read data, 11 -> unused
+.connect 0 unused[31:0]
+Xwdmux wdsel0#32 wdsel1#32 pc4[31:0] aluf[31:0] memrd[31:0] unused[31:0] wd[31:0] mux4
+
+Xjdisplaya ra2_b_wdsel[3:0] ra2sel bsel wdsel[1:0] join
+Xjdisplayb wr_werf[1:0]     wr werf_               join
+
+*******************************************************************************
+
+.tran 1280ns
+.plot pc[8:0]
+.plot betaop(opcode[5:0])
+.plot d(ra[4:0])
+.plot d(rb[4:0])
+.plot d(rc[4:0])
+.plot sd(c[15:0])
+.plot b(pcsel[1:0])
+.plot b(ra2_b_wdsel[3:0])
+.plot b(alufn[5:0])
+.plot b(wr_werf[1:0])
+.plot clk
+.plot d(wa[4:0])
+.plot werf
+.plot sd(rd1_[31:0])
+.plot sd(rd2_[31:0])
+.plot sd(wd[31:0])
+.plot d(mema[8:0])
+.plot sd(memrd[31:0])
+.plot sd(memwd[31:0])
