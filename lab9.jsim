@@ -20,18 +20,6 @@ Xmemory  vdd  0    0   pc[8:2]    inst[31:0]
 Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
 +           vdd  0    0     ra2_[4:0]  rd2_[31:0]
 +           0    clk  werf  wa[4:0]    wd[31:0]
-+           vdd  0    0     0 0 0 0 0  r0_[31:0]
-+           vdd  0    0     0 0 0 0 vdd  r1_[31:0]
-+           vdd  0    0     0 0 0 vdd 0  r2_[31:0]
-+           vdd  0    0     0 0 0 vdd vdd  r3_[31:0]
-+           vdd  0    0     0 0 vdd 0 0  r4_[31:0]
-+           vdd  0    0     0 0 vdd 0 vdd  r5_[31:0]
-+           vdd  0    0     0 0 vdd vdd 0  r6_[31:0]
-+           vdd  0    0     0 0 vdd vdd vdd  r7_[31:0]
-+           vdd  0    0     0 vdd 0 0 0  r8_[31:0]
-+           vdd  0    0     0 vdd 0 0 vdd  r9_[31:0]
-+           vdd  0    0     0 vdd 0 vdd 0  r10_[31:0]
-+           vdd  0    0     0 vdd 0 vdd vdd  r11_[31:0]
 + $memory width=32 nlocations=32 contents=(
 +   0 0 0 0 0 0 0 0
 +   0 0 0 0 0 0 0 0
