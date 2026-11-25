@@ -192,15 +192,14 @@ Xzdet rd1_[31:0] z eq0
 
 .subckt update_pc clk reset pcsel[1:0] c[6:0] jt[8:2] pc4[8:2] pc[8:2]
     Xpcadd pc[8:2] 0#7 vdd pc4[8:2] add7
-    * TODO: implement branch target
-    .connect 0 bt[8:2] 
+    Xpcbrtadd pc4[8:2] c[6:0] 0 bt[8:2] add7
     Xpcmux pcsel[0]#7 pcsel[1]#7 pc4[8:2] bt[8:2] jt[8:2] pc[8:2] pcx[8:2] mux4
     Xpcrst reset#7 pcx[8:2] 0#7 pcnext[8:2] mux2
     Xpcreg pcnext[8:2] clk#7 pc[8:2] dreg
 .ends
 
-* TODO: implement reset
-.connect vdd reset
+* i think so??? - andre
+.connect 0 reset
 Xupdatepc clk reset pcsel[1:0] c[6:0] rd1_[8:2] pc4[8:2] pc[8:2] update_pc
 
 * data memory address / write data
