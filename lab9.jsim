@@ -198,8 +198,8 @@ Xzdet rd1_[31:0] z eq0
     Xpcreg pcnext[8:2] clk#7 pc[8:2] dreg
 .ends
 
-* i think so??? - andre
-.connect 0 reset
+Wreset reset nrz(0, 5, 20ns, 0ns, 0.001ns, 0.001ns)
++ 1 0
 Xupdatepc clk reset pcsel[1:0] c[6:0] rd1_[8:2] pc4[8:2] pc[8:2] update_pc
 
 * data memory address / write data
