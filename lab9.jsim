@@ -1,5 +1,5 @@
 *******************************************************************************
-* LAB #8
+* LAB #9
 * G - Group 5
 * - Celestino, Kenaz
 * - Duro, Yurich
@@ -76,8 +76,7 @@ Xjinstc inst[20:16] ra[4:0]     join
 Xjinstd inst[15:11] rb[4:0]     join
 Xjinste inst[15:0]  c[15:0]     join
 
-Xjpc clk[8:4] pc[6:2] join
-.connect 0 pc[8:7] pc[1:0]
+.connect 0 pc[1:0] pc4[1:0] pc4[31:9]
 
 *******************************************************************************
 * ALU
@@ -186,12 +185,23 @@ Xalu rd1_[31:0] alub[31:0] alufn[5:0] aluf[31:0] alu32
 * Z detect on Rd1
 Xzdet rd1_[31:0] z eq0
 
-* PC+4
-Xjpcx pc[8:0] pcx[8:0] join
-.connect 0 pcx[31:9]
-.connect 0 four[31:3] four[1:0]
-.connect vdd four2
-Xpcadd pcx[31:0] four[31:0] 0 pc4[31:0] pc4cout[31:30] add32
+* ripple-adder add7 for pc+4 and pc + 4 + 4c
+.subckt add7 a[6:0] b[6:0] cin0 sum[6:0]
+    Xadd[6:0] a[6:0] b[6:0] c[5:0] cin0 sum[6:0] cout c[5:0] fa
+.ends
+
+.subckt update_pc clk reset pcsel[1:0] c[6:0] jt[8:2] pc4[8:2] pc[8:2]
+    Xpcadd pc[8:2] 0#7 vdd pc4[8:2] add7
+    * TODO: implement branch target
+    .connect 0 bt[8:2] 
+    Xpcmux pcsel[0]#7 pcsel[1]#7 pc4[8:2] bt[8:2] jt[8:2] pc[8:2] pcx[8:2] mux4
+    Xpcrst reset#7 pcx[8:2] 0#7 pcnext[8:2] mux2
+    Xpcreg pcnext[8:2] clk#7 pc[8:2] dreg
+.ends
+
+* TODO: implement reset
+.connect vdd reset
+Xupdatepc clk reset pcsel[1:0] c[6:0] rd1_[8:2] pc4[8:2] pc[8:2] update_pc
 
 * data memory address / write data
 Xjmema  aluf[8:0]   mema[8:0]    join
@@ -206,7 +216,7 @@ Xjdisplayb wr_werf[1:0]     wr werf_               join
 
 *******************************************************************************
 
-.tran 1280ns
+.tran 6000ns
 .plot pc[8:0]
 .plot betaop(opcode[5:0])
 .plot d(ra[4:0])
