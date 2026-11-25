@@ -35,7 +35,8 @@ Xregisters  vdd  0    0     ra1_[4:0]  rd1_[31:0]
   Xwerf wp wq werf nand2
 .ends
 
-Xwerf_pass wa[4:0] werf werf_ werf_pass
+Xwerf_pass wa[4:0] werfs werf_ werf_pass
+Xwerfrst reset werfs 0 werf mux2
 
 Xcontrol  vdd  0  0  z opcode[5:0]  control[13:0]
 + $memory width=14 nlocations=128 contents=(
@@ -67,7 +68,8 @@ Xjcontrolb control11      ra2sel     join
 Xjcontrolc control10      bsel       join
 Xjcontrold control[9:8]   wdsel[1:0] join
 Xjcontrole control[7:2]   alufn[5:0] join
-Xjcontrolf control1       wr         join
+Xjcontrolf control1       wr_        join
+Xwrrst reset wr_ 0 wr mux2
 Xjcontrolg control0       werf_      join
 
 Xjinsta inst[31:26] opcode[5:0] join
@@ -161,9 +163,7 @@ Xjinste inst[15:0]  c[15:0]     join
 * DATAPATH
 *******************************************************************************
 * register/data-memory write clock 
-* (issue: green bar of death on other clock speeds; sometimes 2 rising edge for 1 instruction)
-* won't settle too much on this since PC won't be clock based anymore but just used this to check if implementations work
-Xjclk clk3 clk join
+Xjclk clk2 clk join
 
 * register file read/write addresses
 Xjra1 ra[4:0] ra1_[4:0] join
@@ -215,7 +215,7 @@ Xjdisplayb wr_werf[1:0]     wr werf_               join
 
 *******************************************************************************
 
-.tran 6000ns
+.tran 3000ns
 .plot pc[8:0]
 .plot betaop(opcode[5:0])
 .plot d(ra[4:0])
